@@ -5,8 +5,8 @@ import 'package:bloc_app/screens/home/ui/product_tile_widget.dart';
 import 'package:bloc_app/screens/wishlist/ui/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../cart/ui/cart.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,11 +37,9 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Wishlist()));
           } else if (state is HomeProductItemCartedActionState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("${state.cartedItem.name} Carted")));
+            showFlushbar(context, "${state.cartedItem.name} Carted");
           } else if (state is HomeProductItemWishlistedActionState) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('${state.wishlistedItem.name} Wishlisted')));
+            showFlushbar(context, "${state.wishlistedItem.name} Wishlisted");
           }
         },
         builder: (context, state) {
@@ -87,5 +85,17 @@ class _HomePageState extends State<HomePage> {
               return SizedBox();
           }
         });
+  }
+
+  void showFlushbar(BuildContext context, String text) {
+    Flushbar(
+      duration: Duration(seconds: 1),
+      flushbarPosition: FlushbarPosition.TOP,
+      icon: Icon(Icons.info, size: 32, color: Colors.amber),
+      title: 'Title',
+      message: text,
+      margin: EdgeInsets.only(top: 30),
+      borderRadius: BorderRadius.circular(10),
+    ).show(context);
   }
 }
